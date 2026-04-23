@@ -1,6 +1,7 @@
 from flask import Flask
 from marshmallow import ValidationError
 from werkzeug.exceptions import NotFound
+from http.client import HTTPException
 
 from .config import Config
 from .extensions import db, ma, migrate
@@ -39,8 +40,7 @@ def create_app():
         # Passa o código de erro correto se for um HTTPException
         if isinstance(e, HTTPException):
             return e
-            
         # Se for uma exceção inesperada (ex: bug no Python), retorna 500
-        return jsonify(error="Erro interno do servidor", status=500), 500
+        return {"success": False, "message": "Erro interno do servidor"}, 500
     
-        return app
+    return app
