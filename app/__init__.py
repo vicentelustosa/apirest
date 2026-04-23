@@ -1,6 +1,5 @@
 from flask import Flask
 from marshmallow import ValidationError
-from werkzeug.exceptions import NotFound
 from http.client import HTTPException
 
 from .config import Config
@@ -27,13 +26,9 @@ def create_app():
     def handle_validation_error(err):
         return {"success": False, "errors": err.messages}, 400
 
-    @app.errorhandler(NotFound)
-    def handle_not_found(err):
-        return {"success": False, "message": "Recurso nao encontrado"}, 404
-
     @app.errorhandler(404)
     def handle_404(err):
-        return {"success": False, "message": "Rota nao encontrada"}, 404
+        return {"success": False, "message": "Recurso nao encontrado"}, 404
 
     @app.errorhandler(Exception)
     def handle_generic_exception(e):

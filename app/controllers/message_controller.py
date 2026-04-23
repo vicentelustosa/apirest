@@ -31,3 +31,16 @@ def criar_mensagem(data):
     db.session.commit()
 
     return success_response(message_schema.dump(nova_mensagem), 201)
+
+def atualizar_mensagem(id, data):
+    m = Message.query.get_or_404(id)
+    for k, v in message_schema.load(data, partial=True).items():
+        setattr(m, k, v)
+    db.session.commit()
+    return success_response(message_schema.dump(m))
+
+def deletar_mensagem(id):
+    m = Message.query.get_or_404(id)
+    db.session.delete(m)
+    db.session.commit()
+    return "", 204
