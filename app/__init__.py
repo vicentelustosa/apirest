@@ -34,4 +34,13 @@ def create_app():
     def handle_404(err):
         return {"success": False, "message": "Rota nao encontrada"}, 404
 
-    return app
+    @app.errorhandler(Exception)
+    def handle_generic_exception(e):
+        # Passa o código de erro correto se for um HTTPException
+        if isinstance(e, HTTPException):
+            return e
+            
+        # Se for uma exceção inesperada (ex: bug no Python), retorna 500
+        return jsonify(error="Erro interno do servidor", status=500), 500
+    
+        return app
